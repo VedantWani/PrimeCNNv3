@@ -1,8 +1,7 @@
 #torch modules
-from torch.utils.data import Dataset, DataLoader
 import torch
 import torch.nn as nn
-from torch.optim.lr_scheduler import _LRScheduler
+from torch.utils.data import Dataset, DataLoader
 
 #numpy modules
 import numpy as np
@@ -20,6 +19,7 @@ from pathlib import Path
 #system modules
 import random
 import time
+import os
 
 #fastai
 from fastcore.foundation import GetAttr, noop
