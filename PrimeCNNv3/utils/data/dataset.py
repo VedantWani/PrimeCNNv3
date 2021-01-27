@@ -97,7 +97,7 @@ class CovidXDataset(Dataset):
 
         if self.transform:
             random.seed(transform_seed)
-            augmented = self.transform(image=np_image)
+            augmented = self.transform(image=image)
             image = augmented['image']
 
         return image, label
