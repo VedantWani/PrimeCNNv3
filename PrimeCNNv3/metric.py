@@ -34,17 +34,17 @@ def error_rate(preds, target, dim = -1):
     return 1 - accuracy(preds=preds, target = target, dim = -1)
 
 # Cell
-def precision(preds, target, dim = -1):
+def precision(preds, target, dim = -1, average = 'macro', **kwargs):
     '''Global average precision score'''
-    return precision_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average='macro')
+    return precision_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
 
 # Cell
-def recall(preds, target, dim = -1):
-    return recall_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average='macro')
+def recall(preds, target, dim = -1,average = 'macro', **kwargs):
+    return recall_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
 
 # Cell
-def f1score(preds, target, dim = -1):
-    return f1_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average='macro')
+def f1score(preds, target, dim = -1, average = 'macro', **kwargs):
+    return f1_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
 
 # Cell
 def confusion_matrix(preds, target, labels = None, **kwargs):
