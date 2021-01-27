@@ -2,7 +2,7 @@
 from torch.utils.data import Dataset, DataLoader
 import torch
 import torch.nn as nn
-
+from torch.optim.lr_scheduler import _LRScheduler
 
 #numpy modules
 import numpy as np

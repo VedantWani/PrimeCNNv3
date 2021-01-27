@@ -18,12 +18,14 @@ index = {"get_dataset": "00_utils.data.dataset.ipynb",
          "AvgLosses": "03_callbacks.ipynb",
          "AvgSmoothLoss": "03_callbacks.ipynb",
          "Learner": "04_learner.ipynb",
-         "FitCancelException": "04_learner.ipynb",
+         "random_seed": "04_learner.ipynb",
          "accuracy": "05_metrics.ipynb",
          "error_rate": "05_metrics.ipynb",
          "precision": "05_metrics.ipynb",
          "recall": "05_metrics.ipynb",
-         "f1score": "05_metrics.ipynb"}
+         "f1score": "05_metrics.ipynb",
+         "confusion_matrix": "05_metrics.ipynb",
+         "plot_confusion_matrix": "05_metrics.ipynb"}
 
 modules = ["utils/data/dataset.py",
            "utils/data/dataloaders.py",

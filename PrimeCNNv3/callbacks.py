@@ -182,6 +182,12 @@ class AccumMetric:
         self.preds.append(learn.preds.cpu().detach())
         self.target.append(learn.yb.cpu().detach())
 
+    def get_target_preds_np(self):
+        '''Returns prediction and target'''
+        target = torch.cat(self.hist_target).numpy()
+        preds = torch.cat(self.hist_preds).argmax(dim = -1).numpy()
+
+        return preds,target
 
     def reset(self):
         self.hist_preds.extend(self.preds)
