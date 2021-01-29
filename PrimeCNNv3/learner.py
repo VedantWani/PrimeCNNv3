@@ -289,6 +289,7 @@ class Learner:
         target = []
 
         for xb,yb in dl:
+
             xb = xb.to(self.device, non_blocking = True)
             yb = yb.to(self.device, non_blocking = True)
             self.model.to(self.device)
@@ -297,7 +298,7 @@ class Learner:
 
             preds.append(pred.argmax(dim = -1))
             if yb is not None:
-                target.append(yb)
+                target.append(yb.cpu().detach())
 
         return torch.cat(preds),torch.cat(target)
 
