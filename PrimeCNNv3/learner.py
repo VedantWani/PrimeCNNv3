@@ -10,6 +10,7 @@ import copy
 
 # Cell
 class Learner:
+    '''Learner for the Model'''
     def __init__(self, model, dls, metric, cbs, loss_func, opt_func = None, lr_schedular_func = None):
         self.model = model
         self.dls = dls
@@ -169,7 +170,7 @@ class Learner:
         self('after_fit')
 
     def one_cycle_fit(self, epochs, max_lr, wd, div_factor = 25., pct_start= 0.25, **kwargs):
-
+        #div_factor and pct changed from default
 
         self._init_optimizer(epochs, max_lr, wd, **kwargs)
 
@@ -198,6 +199,7 @@ class Learner:
         self.lr = lr
         self.wd = wd
 
+        #eps is changed to 1e-05 from default value of 1e-08
         self.opt = self.opt_func(params = filter(lambda p: p.requires_grad, self.model.parameters()), lr = self.lr,
                                 weight_decay = self.wd,eps = 1e-05, betas = (0.9,0.99), **kwargs)
 
@@ -244,6 +246,61 @@ class Learner:
         load the model wieghts
         '''
         self.model.load_state_dict(torch.load(path))
+
+    def predict(self, image, classes:list = None):
+        '''args:
+                input:
+                    image(PIL or numpy array)
+                    return the model prediction class
+
+        '''
+        if isinstance(image,Image.Image):
+            image_data = np.array(image.convert('RGB'))
+        if isinstance(image, np.ndarray):
+            assert len(image.shape) == 3, 'Image is does not have 3 channels'
+            image_data = image
+
+        transform = A.Compose([A.Resize(224,224),A.Normalize(), ToTensorV2()])
+        image_tensor = transform(image = image_data)['image'].unsqueeze(dim = 0)
+        image_tensor = image_tensor.to(self.device)
+        self.model.to(self.device)
+        self.model.eval()
+        preds = self.model(image_tensor).cpu().detach()
+
+        if hasattr(self.dls.valid.dataset,'CLASSES'):
+            labels = list(self.dls.valid.dataset.CLASSES.key())
+        elif classes is not None:
+            labels = classes
+
+
+        return {'Class':labels[preds.argmax(dim = -1).item()], 'Propability': preds}
+
+
+    def get_preds(self, dl):
+        '''input:
+            dataloader
+            for each batch in dataloader
+                get prediction from the model store it.
+
+            after going through whole data from dl
+            return prediction
+        '''
+        preds = []
+        target = []
+
+        for xb,yb in dl:
+            xb = xb.to(self.device, non_blocking = True)
+            yb = yb.to(self.device, non_blocking = True)
+            self.model.to(self.device)
+            self.model.eval()
+            pred = self.model(xb).cpu().detach()
+
+            preds.append(pred.argmax(dim = -1))
+            if yb is not None:
+                target.append(yb)
+
+        return torch.cat(preds),torch.cat(target)
+
 
 # Cell
 class ExponentialLR(_LRScheduler):

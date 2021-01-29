@@ -8,6 +8,7 @@ __all__ = ['Callbacks', 'SetupLearnerCB', 'Recorder', 'ShowStats', 'TrackTrainVa
 from .imports import *
 from .utils.vizualize import plot_loss_update
 from .metric import accuracy
+import csv
 
 # Cell
 class Callbacks(GetAttr): _default='learner'
@@ -32,10 +33,11 @@ class SetupLearnerCB(Callbacks):
         self.model.eval()
         self.learner.training = False
 
-    def after_validation(self):
-        pass
-      #  self.mb.write(f'Epoch: {self.epoch}, Training Loss: {self.epoch_loss.train[-1]}, validation Loss: {self.epoch_loss.valid[-1]}, Training Accuracy: {self.epoch_acc.train[-1]}, Validation Accuracy: {self.epoch_acc.valid[-1]}')
-      #  plot_loss_update(self.epoch, self.epochs,self.mb, train_loss=self.epoch_loss.train,valid_loss=self.epoch_loss.valid)
+    def after_fit(self):
+        self.xb, self.yb = (None,),(None,)
+        self.preds = None
+        self.loss = None
+
 
 # Cell
 class Recorder(Callbacks):
@@ -127,10 +129,7 @@ class ShowStats(Callbacks):
                          train_loss = self.losses.train, valid_loss = self.losses.valid)
 
         self.mb.write(self.log, table = True)
-    def after_fit(self):
-        self.xb, self.yb = (None,),(None,)
-        self.preds = None
-        self.loss = None
+
 
 # Cell
 class TrackTrainVal:

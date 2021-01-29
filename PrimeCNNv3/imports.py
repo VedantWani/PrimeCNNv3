@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #PIL
+import PIL
 from PIL import Image
 
 #Pathlib
@@ -26,3 +27,6 @@ from pathlib import Path
 from fastcore.foundation import GetAttr, noop
 from fastprogress.fastprogress import master_bar, progress_bar
 from fastprogress.fastprogress import format_time
+
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
