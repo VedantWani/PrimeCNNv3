@@ -31,7 +31,7 @@ def plot_loss_update(nbs_batches,epochs, mb, train_loss, valid_loss):
     x_bounds= (0,(epochs - len(nbs_batches)) * nbs_batches[0] + len(train_loss))
     y_bounds = (0, max(max(train_loss),max(valid_loss)))
 
-    mb.update_graph(graphs,x_bounds, y_bounds*1.2, figsize = (6,4)) #add margin
+    mb.update_graph(graphs,x_bounds, y_bounds*2, figsize = (6,4)) #add margin
 
 # Cell
 def plot_lr(lrs, losses):
