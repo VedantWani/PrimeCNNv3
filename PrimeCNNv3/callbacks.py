@@ -60,7 +60,7 @@ class Recorder(Callbacks):
         self.track_loss.reset()
         self.track_train_smoothLoss.reset()
         self.epoch_metricTracker.reset()
-        self.reset_hist()
+        self.accumetric.reset_hist()
         self.learner.lrs = []
         self.learner.train_iter = 0
 
