@@ -60,7 +60,7 @@ class Recorder(Callbacks):
         self.track_loss.reset()
         self.track_train_smoothLoss.reset()
         self.epoch_metricTracker.reset()
-
+        self.reset_hist()
         self.learner.lrs = []
         self.learner.train_iter = 0
 
@@ -127,7 +127,10 @@ class ShowStats(Callbacks):
                          train_loss = self.losses.train, valid_loss = self.losses.valid)
 
         self.mb.write(self.log, table = True)
-
+    def after_fit(self):
+        self.xb, self.yb = (None,),(None,)
+        self.preds = None
+        self.loss = None
 
 # Cell
 class TrackTrainVal:
@@ -188,6 +191,12 @@ class AccumMetric:
         preds = torch.cat(self.hist_preds).argmax(dim = -1).numpy()
 
         return preds,target
+
+    def reset_hist(self):
+        self.hist_preds.clear()
+        self.hist_target.clear()
+        self.preds.clear()
+        self.target.clear()
 
     def reset(self):
         self.hist_preds.extend(self.preds)
