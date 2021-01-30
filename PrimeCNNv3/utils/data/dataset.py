@@ -91,7 +91,7 @@ class CovidXDataset(Dataset):
         image_path = Path.joinpath(self.root_dir, self.data_list[idx].split()[1])
 
 
-        image = np.array(Image.open(image_path).convert('RGB')) / self.MAX_VAL
+        image = np.array(Image.open(image_path).convert('RGB') / self.MAX_VAL).astype('float32')
 
         transform_seed = np.random.randint(2147483647)
 
