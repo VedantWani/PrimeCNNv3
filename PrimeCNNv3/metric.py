@@ -9,19 +9,22 @@ from sklearn.metrics import confusion_matrix as cm
 import seaborn as sns
 
 # Cell
-def accuracy(preds, target, dim = -1):
+def accuracy(preds, target, dim = -1, index = True):
     '''
         Returns accuracy
 
         Args:
-        preds (np.array): prediction of the model
-        target (np.array): target values
+        if index is True
+        preds (torch_tensor): prediction of the model
+        target (torch): target values
         dim: dimention to use
     '''
+    if not index:
+        return (preds == target).float().mean().item()
     return (preds.argmax(dim = dim) == target).float().mean().item()
 
 # Cell
-def error_rate(preds, target, dim = -1):
+def error_rate(preds, target, dim = -1, index = True):
     '''
         Returns error_rate
         1- accuracy
@@ -31,19 +34,25 @@ def error_rate(preds, target, dim = -1):
         target (torch tensor): target values
         dim: dimention to use
     '''
-    return 1 - accuracy(preds=preds, target = target, dim = -1)
+    return 1 - accuracy(preds=preds, target = target, dim = dim, index = index)
 
 # Cell
-def precision(preds, target, dim = -1, average = 'macro', **kwargs):
+def precision(preds, target, dim = -1, average = 'macro',index = True, **kwargs):
     '''Global average precision score'''
+    if not index:
+        return precision_score(y_pred=preds.numpy(), y_true = target.numpy(), average=average, **kwargs)
     return precision_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
 
 # Cell
-def recall(preds, target, dim = -1,average = 'macro', **kwargs):
+def recall(preds, target, dim = -1,average = 'macro',index = True, **kwargs):
+    if not index:
+        return recall_score(y_pred=preds.numpy(), y_true = target.numpy(), average=average, **kwargs)
     return recall_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
 
 # Cell
-def f1score(preds, target, dim = -1, average = 'macro', **kwargs):
+def f1score(preds, target, dim = -1, average = 'macro', index = True, **kwargs):
+    if not index:
+        return f1_score(y_pred=preds.numpy(), y_true = target.numpy(), average=average, **kwargs)
     return f1_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
 
 # Cell
