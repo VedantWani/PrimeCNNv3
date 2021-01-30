@@ -66,7 +66,7 @@ def get_train_val_split(train_list, valid_pct = 0.2, seed = None):
 class CovidXDataset(Dataset):
     '''CovidXv5 Dataset'''
 
-    def __init__(self, root_dir, data_list, seed = None, transform = None, MAX_VAL = 255):
+    def __init__(self, root_dir, data_list, seed = None, transform = None, MAX_VAL = 255, dtype = 'float32'):
         '''
             Args:
             root_dir (Path): Directory with all the images.
@@ -91,7 +91,7 @@ class CovidXDataset(Dataset):
         image_path = Path.joinpath(self.root_dir, self.data_list[idx].split()[1])
 
 
-        image = np.array(Image.open(image_path).convert('RGB') / self.MAX_VAL).astype('float32')
+        image = (np.array(Image.open(image_path).convert('RGB')) / self.MAX_VAL).astype(dtype)
 
         transform_seed = np.random.randint(2147483647)
 
