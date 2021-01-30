@@ -66,7 +66,7 @@ def get_train_val_split(train_list, valid_pct = 0.2, seed = None):
 class CovidXDataset(Dataset):
     '''CovidXv5 Dataset'''
 
-    def __init__(self, root_dir, data_list, seed = None, transform = None):
+    def __init__(self, root_dir, data_list, seed = None, transform = None, MAX_VAL = 255):
         '''
             Args:
             root_dir (Path): Directory with all the images.
@@ -80,7 +80,7 @@ class CovidXDataset(Dataset):
         self.transform = transform
         self.data_list = data_list
         self.CLASSES = {'normal' : 0, 'pneumonia' : 1, 'COVID-19' : 2}
-        self.MAX_VAL = 255
+        self.MAX_VAL = MAX_VAL
 
     def __getitem__(self, idx):
 
@@ -91,7 +91,7 @@ class CovidXDataset(Dataset):
         image_path = Path.joinpath(self.root_dir, self.data_list[idx].split()[1])
 
 
-        image = np.array(Image.open(image_path).convert('RGB'))
+        image = np.array(Image.open(image_path).convert('RGB')) / self.MAX_VAL
 
         transform_seed = np.random.randint(2147483647)
 
@@ -133,12 +133,38 @@ class CovidXDataset(Dataset):
 
         plt.tight_layout(True)
 
-    def show_distribution(self, figsize = (5,5)):
+    def _get_Stats(self):
+        '''
+            Calculates number of samples in each of the class
+
+            return dictionary
+        '''
         class_dist = {key : 0 for key in self.CLASSES.keys()}
         for element in self.data_list:
             label = element.split()[2]
             class_dist[label] += 1
 
+        return class_dist
+    def show_distribution(self, figsize = (5,5)):
+        class_dist = self._get_Stats()
         _, ax = plt.subplots(1,1, figsize = figsize)
 
         ax.bar(class_dist.keys(), class_dist.values())
+
+    def get_Weighted_RandomSampler(self,replacement = True, seed = 2147483647, use_generator = True):
+        '''
+            replacement: True:with or Fasle:without replacement
+
+            seed value is not used if use_generator is false
+            returns weightedRandomSampler for imbalance class
+        '''
+        class_distrib = list(self._get_Stats().values())
+        class_weight = 1. / torch.as_tensor(class_distrib).float()
+
+        sample_weight = [class_weight[self.data_list[idx].split()[2]] for idx in range(self.__len__())]
+
+
+        generator = torch.Generator().manual_seed(seed) if use_generator else None
+
+        return WeightedRandomSampler(weights = sample_weight, num_samples = len(sample_weight),
+                                     replacement = replacement, generator = generator)

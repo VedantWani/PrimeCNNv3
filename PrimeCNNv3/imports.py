@@ -1,7 +1,7 @@
 #torch modules
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
 
 #numpy modules
 import numpy as np
