@@ -81,6 +81,7 @@ class CovidXDataset(Dataset):
         self.data_list = data_list
         self.CLASSES = {'normal' : 0, 'pneumonia' : 1, 'COVID-19' : 2}
         self.MAX_VAL = MAX_VAL
+        self.dtype = dtype
 
     def __getitem__(self, idx):
 
@@ -91,7 +92,7 @@ class CovidXDataset(Dataset):
         image_path = Path.joinpath(self.root_dir, self.data_list[idx].split()[1])
 
 
-        image = (np.array(Image.open(image_path).convert('RGB')) / self.MAX_VAL).astype(dtype)
+        image = (np.array(Image.open(image_path).convert('RGB')) / self.MAX_VAL).astype(self.dtype)
 
         transform_seed = np.random.randint(2147483647)
 
