@@ -206,7 +206,7 @@ class Learner:
 
         #eps is changed to 1e-05 from default value of 1e-08
         self.opt = self.opt_func(params = filter(lambda p: p.requires_grad, self.model.parameters()), lr = self.lr,
-                                weight_decay = self.wd,eps = 1e-05, betas = (0.9,0.99), **kwargs)
+                                weight_decay = self.wd, **kwargs)
 
     def freeze_to(self, freeze_to_till):
         '''
