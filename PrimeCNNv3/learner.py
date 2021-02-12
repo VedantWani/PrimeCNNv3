@@ -35,10 +35,14 @@ class Learner:
 
         #save model, optimizer and lr_schdeular
         saved_param = {
-            'model' : copy.deepcopy(self.model.state_dict()),
-            'optimizer' : copy.deepcopy(self.opt.state_dict()) if self.opt is not None else None,
-            'lr_schedular' : copy.deepcopy(self.lr_schedular if self.lr_schedular is not None else None)
+            'model' : self.model.state_dict(),
+            'optimizer' : self.opt.state_dict() if self.opt is not None else None,
+            'lr_schedular' : self.lr_schedular if self.lr_schedular is not None else None
         }
+
+        torch.save(saved_param, 'tmp.pth')
+
+
         store_cbs = self.cbs
         self.cbs = []
         avg_loss = 0.
@@ -94,6 +98,7 @@ class Learner:
         plot_lr(lrs, lr_loss)
 
         self.cbs = store_cbs
+        saved_param = torch.load('tmp.pth')
         self.model.load_state_dict(saved_param['model'])
         self.xb, self.yb = None, None
         if saved_param['optimizer'] is None:
