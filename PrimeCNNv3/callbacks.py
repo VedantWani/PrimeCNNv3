@@ -51,14 +51,13 @@ class Recorder(Callbacks):
 
         self.track_train_smoothLoss = AvgSmoothLoss()
         self.epoch_metricTracker = TrackTrainVal()
-
+        self.accumetric = AccumMetric()
 
 
 
 
     def before_fit(self):
         self.learner.losses = self.loss
-        self.learner.metricPair = self.accumetric
         self.losses.reset()
         self.track_loss.reset()
         self.track_train_smoothLoss.reset()
