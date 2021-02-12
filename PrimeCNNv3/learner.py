@@ -121,9 +121,11 @@ class Learner:
         self.running_loss = self.loss.item()
 
         if self.training:
+            self('before_step')
             self.opt.zero_grad()
             self.loss.backward()
             self.opt.step()
+            self('after_step')
 
             if self.lr_schedular is not None:
                 self.lr_schedular.step()

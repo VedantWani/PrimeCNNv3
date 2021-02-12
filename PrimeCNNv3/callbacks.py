@@ -37,7 +37,7 @@ class SetupLearnerCB(Callbacks):
         self.xb, self.yb = (None,),(None,)
         self.preds = None
         self.loss = None
-
+        torch.cuda.empty_cache()
 
 # Cell
 class Recorder(Callbacks):
@@ -51,13 +51,14 @@ class Recorder(Callbacks):
 
         self.track_train_smoothLoss = AvgSmoothLoss()
         self.epoch_metricTracker = TrackTrainVal()
-
         self.accumetric = AccumMetric()
+
 
 
 
     def before_fit(self):
         self.learner.losses = self.loss
+        self.metricPair = self.accumetric
         self.losses.reset()
         self.track_loss.reset()
         self.track_train_smoothLoss.reset()
@@ -65,6 +66,7 @@ class Recorder(Callbacks):
         self.accumetric.reset_hist()
         self.learner.lrs = []
         self.learner.train_iter = 0
+
 
     def before_epoch(self):
         self.accumetric.reset()
