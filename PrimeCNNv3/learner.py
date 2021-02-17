@@ -210,7 +210,7 @@ class Learner:
         self.opt = self.opt_func(params = filter(lambda p: p.requires_grad, self.model.parameters()), lr = self.lr,
                                 weight_decay = self.wd, **kwargs)
 
-    def freeze_to(self, freeze_to_till):
+    def freeze_to(self, freeze_to_till, show_log = True):
         '''
             change require grad to false i.e freeze the layers
         '''
@@ -220,12 +220,14 @@ class Learner:
 
             for idx, layer in enumerate(self.model.children()):
                 if idx >= freeze_to_till:
-                    print(f'Layer :{idx} unFreeze')
+                    if show_log:
+                        print(f'Layer :{idx} unFreeze')
                     for param in layer.parameters():
                         param.require_grad = True
 
                 else:
-                    print(f'Layer :{idx} Freeze')
+                    if show_log:
+                        print(f'Layer :{idx} Freeze')
                     for param in layer.parameters():
                         param.require_grad = False
 
