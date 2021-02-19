@@ -25,8 +25,8 @@ class SetupLearnerCB(Callbacks):
         self.learner.xb = xb.to(self.device, non_blocking = True)
         self.learner.yb = yb.to(self.device, non_blocking = True)
     def after_batch(self):
-        del self.xb
-        del sel.yb
+        del self.learner.xb
+        del self.learner.yb
     def before_train_epoch(self):
         self.model.train()
         self.learner.training = True
