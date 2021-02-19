@@ -24,7 +24,9 @@ class SetupLearnerCB(Callbacks):
         xb, yb = self.batch
         self.learner.xb = xb.to(self.device, non_blocking = True)
         self.learner.yb = yb.to(self.device, non_blocking = True)
-
+    def after_batch(self.batch):
+        del self.xb
+        del sel.yb
     def before_train_epoch(self):
         self.model.train()
         self.learner.training = True
@@ -35,8 +37,8 @@ class SetupLearnerCB(Callbacks):
 
     def after_fit(self):
         self.xb, self.yb = (None,),(None,)
-        self.preds = None
-        self.loss = None
+        del self.preds
+        del self.loss
         torch.cuda.empty_cache()
 
 # Cell
