@@ -34,9 +34,9 @@ class SetupLearnerCB(Callbacks):
         self.learner.training = False
 
     def after_fit(self):
-        self.xb, self.yb = (None,),(None,)
-        self.preds = None
-        self.loss = None
+        self.learner.xb, self.learner.yb = (None,),(None,)
+        self.learner.preds = None
+        self.learner.loss = None
         torch.cuda.empty_cache()
 
 # Cell

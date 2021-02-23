@@ -176,7 +176,7 @@ class Learner:
 
         self('after_fit')
 
-    def one_cycle_fit(self, epochs, max_lr, wd, div_factor = 25., pct_start= 0.25, **kwargs):
+    def one_cycle_fit(self, epochs, max_lr, wd, div_factor = 25., pct_start= 0.25,final_div_factor =1e5, **kwargs):
         #div_factor and pct changed from default
 
         self._init_optimizer(epochs, max_lr, wd, **kwargs)
@@ -185,7 +185,7 @@ class Learner:
 
         self.lr_schedular = torch.optim.lr_scheduler.OneCycleLR(self.opt, max_lr = max_lr, epochs = epochs,
                                                                 steps_per_epoch = len(self.dls.train), div_factor= div_factor,
-                                                           pct_start = pct_start)
+                                                           pct_start = pct_start, final_div_factor = final_div_factor)
         self('before_fit')
         try:
 
