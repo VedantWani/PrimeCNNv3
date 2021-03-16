@@ -111,7 +111,15 @@ class Recorder(Callbacks):
             self.track_loss.value = self.learner
             self.accumetric.value = self.learner
 
-
+    def reset(self):
+        self.learner.losses = self.loss
+        self.losses.reset()
+        self.track_loss.reset()
+        self.track_train_smoothLoss.reset()
+        self.epoch_metricTracker.reset()
+        self.accumetric.reset_hist()
+        self.learner.lrs = []
+        self.learner.train_iter = 0
 
 # Cell
 class ShowStats(Callbacks):

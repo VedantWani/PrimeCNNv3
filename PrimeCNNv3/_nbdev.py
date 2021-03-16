@@ -28,6 +28,7 @@ index = {"get_dataset": "00_utils.data.dataset.ipynb",
          "precision": "05_metrics.ipynb",
          "recall": "05_metrics.ipynb",
          "f1score": "05_metrics.ipynb",
+         "f1beta": "05_metrics.ipynb",
          "confusion_matrix": "05_metrics.ipynb",
          "plot_confusion_matrix": "05_metrics.ipynb"}
 
