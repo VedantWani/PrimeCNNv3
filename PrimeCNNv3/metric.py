@@ -57,7 +57,7 @@ def f1score(preds, target, dim = -1, average = 'macro', index = True, **kwargs):
     return f1_score(y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
 
 # Cell
-def f1beta(beta, preds, target, dim = -1, average = 'macro', index = True, **kwargs)
+def f1beta(beta, preds, target, dim = -1, average = 'macro', index = True, **kwargs):
     if not index:
         return fbeta_score(beta = beta, y_pred=preds.numpy(), y_true = target.numpy(), average=average, **kwargs)
     return fbeta_score(beta = beta, y_pred=preds.argmax(dim = dim).numpy(), y_true = target.numpy(), average=average, **kwargs)
