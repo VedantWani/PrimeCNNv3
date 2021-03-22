@@ -223,13 +223,13 @@ class Learner:
                     if show_log:
                         print(f'Layer :{idx} unFreeze')
                     for param in layer.parameters():
-                        param.require_grad = True
+                        param.requires_grad = True
 
                 else:
                     if show_log:
                         print(f'Layer :{idx} Freeze')
                     for param in layer.parameters():
-                        param.require_grad = False
+                        param.requires_grad = False
 
     def freeze(self):
         '''
