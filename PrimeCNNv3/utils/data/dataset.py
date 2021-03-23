@@ -228,7 +228,7 @@ class CassavaLeafDataset(Dataset):
     def __getitem__(self, idx):
 
         #extract label and get int value
-        label = self.CLASSES[self.data_list[idx].split(',')[1]]
+        label = int(self.data_list[idx].split(',')[1])
 
         #extract imagename and join image with root_dir path
         image_path = Path.joinpath(self.root_dir, self.data_list[idx].split(',')[0])
