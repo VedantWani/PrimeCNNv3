@@ -2,45 +2,9 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"get_dataset": "00_utils.data.dataset.ipynb",
-         "get_csv_dataset": "00_utils.data.dataset.ipynb",
-         "get_train_val_split": "00_utils.data.dataset.ipynb",
-         "CovidXDataset": "00_utils.data.dataset.ipynb",
-         "CassavaLeafDataset": "00_utils.data.dataset.ipynb",
-         "DataLoaders": "01_utils.data.dataloaders.ipynb",
-         "show_image": "02_utils.vizualize.ipynb",
-         "plot_loss_update": "02_utils.vizualize.ipynb",
-         "plot_lr": "02_utils.vizualize.ipynb",
-         "Callbacks": "03_callbacks.ipynb",
-         "SetupLearnerCB": "03_callbacks.ipynb",
-         "Recorder": "03_callbacks.ipynb",
-         "ShowStats": "03_callbacks.ipynb",
-         "TrackTrainVal": "03_callbacks.ipynb",
-         "AvgMetric": "03_callbacks.ipynb",
-         "AccumMetric": "03_callbacks.ipynb",
-         "AvgLosses": "03_callbacks.ipynb",
-         "AvgSmoothLoss": "03_callbacks.ipynb",
-         "ForwardHook": "03a_hooks.ipynb",
-         "Learner": "04_learner.ipynb",
-         "ExponentialLR": "04_learner.ipynb",
-         "random_seed": "04_learner.ipynb",
-         "FitCancelException": "04_learner.ipynb",
-         "accuracy": "05_metrics.ipynb",
-         "error_rate": "05_metrics.ipynb",
-         "precision": "05_metrics.ipynb",
-         "recall": "05_metrics.ipynb",
-         "f1score": "05_metrics.ipynb",
-         "f1beta": "05_metrics.ipynb",
-         "confusion_matrix": "05_metrics.ipynb",
-         "plot_confusion_matrix": "05_metrics.ipynb"}
+index = {}
 
-modules = ["utils/data/dataset.py",
-           "utils/data/dataloaders.py",
-           "utils/vizualize.py",
-           "callbacks.py",
-           "hooks.py",
-           "learner.py",
-           "metric.py"]
+modules = []
 
 doc_url = "https://vedant.github.io/PrimeCNNv3/"
 
