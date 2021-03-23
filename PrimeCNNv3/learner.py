@@ -101,10 +101,10 @@ class Learner:
         saved_param = torch.load('tmp.pth')
         self.model.load_state_dict(saved_param['model'])
         self.xb, self.yb = None, None
-        if saved_param['optimizer'] is None:
-            self.opt = None
-        else:
-            self.opt.load_state_dict(saved_param['optimizer'])
+        #if saved_param['optimizer'] is None:
+            #self.opt = None
+        #else:
+            #self.opt.load_state_dict(saved_param['optimizer'])
 
         if saved_param['lr_schedular'] is None:
             self.lr_schedular = None

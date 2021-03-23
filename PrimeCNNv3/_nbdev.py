@@ -3,8 +3,10 @@
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"get_dataset": "00_utils.data.dataset.ipynb",
+         "get_csv_dataset": "00_utils.data.dataset.ipynb",
          "get_train_val_split": "00_utils.data.dataset.ipynb",
          "CovidXDataset": "00_utils.data.dataset.ipynb",
+         "CassavaLeafDataset": "00_utils.data.dataset.ipynb",
          "DataLoaders": "01_utils.data.dataloaders.ipynb",
          "show_image": "02_utils.vizualize.ipynb",
          "plot_loss_update": "02_utils.vizualize.ipynb",
