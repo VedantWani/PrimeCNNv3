@@ -304,7 +304,7 @@ class CassavaLeafDataset(Dataset):
         class_distrib = list(self._get_Stats().values())
         class_weight = 1. / torch.as_tensor(class_distrib).float()
 
-        sample_weight = [class_weight[self.CLASSES[self.data_list[idx].split(',')[1]]] for idx in range(self.__len__())]
+        sample_weight = [class_weight[int(self.CLASSES[self.data_list[idx].split(',')[1]])] for idx in range(self.__len__())]
 
 
         generator = torch.Generator().manual_seed(seed) if use_generator else None
