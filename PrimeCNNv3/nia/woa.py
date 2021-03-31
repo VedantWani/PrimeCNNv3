@@ -12,7 +12,7 @@ class Particle:
 
 # Cell
 class WOA:
-    def __init__(self,a, a_step, b, population, fitness_eval_func,n_dims, dim_limits):
+    def __init__(self,a, a_step, b, population, fitness_eval_func,n_dims, dim_limits, maximize = False):
         '''
             input:
 
@@ -24,6 +24,8 @@ class WOA:
                     a_steps = a / iters
                     a = 2.0
                     b = 0.5
+
+                    maximize if True, problem is of maximization else minimization
         '''
 
         self._a = a
@@ -35,6 +37,7 @@ class WOA:
         self.dim_limits = dim_limits
         self.best_solutions = []
         self.Swarm = []
+        self.maximize = maximize
 
     def _initialize_population(self):
         '''Initialize the whale population'''
@@ -148,7 +151,7 @@ class WOA:
 
     def _sort_fitness(self):
 
-        self.Swarm.sort(key = lambda prey:prey.fitness, reverse = False)
+        self.Swarm.sort(key = lambda prey:prey.fitness, reverse = self.maximize)
 
 
     def _get_random_vector(self,dims):
