@@ -32,7 +32,9 @@ index = {"get_dataset": "00_utils.data.dataset.ipynb",
          "f1score": "05_metrics.ipynb",
          "f1beta": "05_metrics.ipynb",
          "confusion_matrix": "05_metrics.ipynb",
-         "plot_confusion_matrix": "05_metrics.ipynb"}
+         "plot_confusion_matrix": "05_metrics.ipynb",
+         "Particle": "06_NIA.SI.WOA.ipynb",
+         "WOA": "06_NIA.SI.WOA.ipynb"}
 
 modules = ["utils/data/dataset.py",
            "utils/data/dataloaders.py",
@@ -40,7 +42,8 @@ modules = ["utils/data/dataset.py",
            "callbacks.py",
            "hooks.py",
            "learner.py",
-           "metric.py"]
+           "metric.py",
+           "nia/si/woa.py"]
 
 doc_url = "https://vedant.github.io/PrimeCNNv3/"
 
