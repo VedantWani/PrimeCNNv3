@@ -70,9 +70,9 @@ class WOA:
         for whale in self.Swarm[1:]:
             if np.random.uniform() > 0.5:
                 A = self._compute_A()
-                norm_A = np.linalg.norm(A)
+                abs_A = np.abs(A)
 
-                if norm_A < 1.0:
+                if abs_A < 1.0:
                     whale.position = self._encircle_prey(whale_pos = whale.position, prey_pos = prey.position, A = A)
                 else:
                     random_prey = self.Swarm[np.random.randint(1, self.population)]
@@ -110,7 +110,7 @@ class WOA:
             Exploitation phase
             Update position according to the prey i.e Shrinking encircling Mechanism
 
-            Xi_new = X* - (A . D)
+            Xi_new = X* - (A . D)....e.q 2.2
 
             where
                 X* is Best solution
@@ -140,12 +140,12 @@ class WOA:
 
             prey = Best search Agent
 
-            D = |X* - Xi|
-            L = random number betwwen -1.0 to 1.0
-            Xi_new = (D . (exp^(b*L) . cos(2*pi*L))) + X*
+            D = |X* - Xi|      ....e.q. 2.5
+            L = random number betwwen -1.0 to 1.0    ....e.q. 2.5
+            Xi_new = (D . (exp^(b*L) . cos(2*pi*L))) + X*   .... e.q. 2.5
         '''
-        D = np.linalg.norm(prey_pos - whale_pos)
-        L = np.random.uniform(-1.0, 1.0, size=self.n_dims)
+        D = np.abs(prey_pos - whale_pos)
+        L = np.random.uniform(-1.0, 1.0)
 
         return (D * (np.exp(self._b * L) * np.cos(2.0 * np.pi * L))) + prey_pos
 
@@ -154,26 +154,24 @@ class WOA:
         self.Swarm.sort(key = lambda prey:prey.fitness, reverse = self.maximize)
 
 
-    def _get_random_vector(self,dims):
-        return np.random.uniform(size = dims)
 
     def _compute_A(self):
         '''
-            A_vec = (2.0 * (a . r_vec)) - a
+            A_vec = (2.0 * (a . r_vec)) - a  ....e.q 2.3
             where:
                 r_vec is random vector between 0,1
         '''
-        r_vec = self._get_random_vector(dims = self.n_dims)
+        r_vec = np.random.uniform()
         return (2.0*(self._a * r_vec)) - self._a
 
     def _compute_C(self):
         '''
-            C_vec = 2 . r_vec
+            C_vec = 2 . r_vec    ......e.q 2.4
 
             where:
                  r_vec is random vector between 0,1
         '''
-        r_vec = self._get_random_vector(dims = self.n_dims)
+        r_vec = np.random.uniform()
         return 2.0 * r_vec
 
     def _compute_D(self, prey_pos, whale_pos):
@@ -182,17 +180,17 @@ class WOA:
                   if random_solution ---> search_d
             whale: that encircles the prey
 
-            D = |(C_vec . X*) - Xi|
+            D = |(C_vec . X*) - Xi| ....e.q  2.1
             where
                 X* is the best solution
                 Xi current search agent
         '''
         C = self._compute_C()
-        return np.linalg.norm((C*prey_pos) - whale_pos)
+        return np.abs((C*prey_pos) - whale_pos)
 
     def _search_D(self,random_prey_pos, whale_pos):
         '''
-            D = |(C_vec . X_rand) - Xi|
+            D = |(C_vec . X_rand) - Xi|  .... e.q 2.7
             where
                 X_rand is the Random search agent
                 Xi current search agent
