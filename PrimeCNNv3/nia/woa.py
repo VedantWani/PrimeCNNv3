@@ -26,6 +26,20 @@ class WOA:
                     b = 0.5
 
                     maximize if True, problem is of maximization else minimization
+
+
+            ref:
+              Seyedali Mirjalili, Andrew Lewis,
+              The Whale Optimization Algorithm,
+              Advances in Engineering Software,
+              Volume 95,
+              2016,
+              Pages 51-67,
+              ISSN 0965-9978,
+              https://doi.org/10.1016/j.advengsoft.2016.01.008.
+              (https://www.sciencedirect.com/science/article/pii/S0965997816300163)
+              Abstract: This paper proposes a novel nature-inspired meta-heuristic optimization algorithm, called Whale Optimization Algorithm (WOA), which mimics the social behavior of humpback whales. The algorithm is inspired by the bubble-net hunting strategy. WOA is tested with 29 mathematical optimization problems and 6 structural design problems. Optimization results prove that the WOA algorithm is very competitive compared to the state-of-art meta-heuristic algorithms as well as conventional methods. The source codes of the WOA algorithm are publicly available at http://www.alimirjalili.com/WOA.html
+              Keywords: Optimization; Benchmark; Constrained optimization; Particle swarm optimization; Algorithm; Heuristic algorithm; Genetic algorithm; Structural optimization
         '''
 
         self._a = a

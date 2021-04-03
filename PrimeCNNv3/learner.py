@@ -176,6 +176,20 @@ class Learner:
 
         self('after_fit')
 
+    def fine_tune(self, epochs, max_lr, wd, freeze_epoch = 5, initial_freeze = 7, div_factor = 25., pct_start= 0.25,final_div_factor =1e5, **kwargs):
+        '''
+            Initially freezes layers last layers i.e fully connected layer based on initial freeze value.
+            Trains those layer with one_cycle_fit policy for 5 epochs, later, unfreezes all the layers,
+            train for given number of epochs
+
+        '''
+        self.freeze_to(freeze_to_till = initial_freeze,show_log = False)
+        self.one_cycle_fit(epochs = freeze_epoch, max_lr = max_lr, wd = wd, div_factor = div_factor, pct_start = pct_start, final_div_factor = final_div_factor, **kwargs)
+
+        self.unfreeze()
+
+        self.one_cycle_fit(epochs = epochs, max_lr = max_lr / 100, wd = wd, div_factor = div_factor, pct_start = pct_start, final_div_factor = final_div_factor, **kwargs)
+
     def one_cycle_fit(self, epochs, max_lr, wd, div_factor = 25., pct_start= 0.25,final_div_factor =1e5, **kwargs):
         #div_factor and pct changed from default
 
@@ -238,7 +252,7 @@ class Learner:
         self.freeze_to(freeze_to_till=-1)
 
     def unfreeze(self):
-        self.freeze_to(freeze_to_till=0)
+        self.freeze_to(freeze_to_till=0, show_log = False)
 
     def __call__(self, name):
         for cb in self.cbs:
