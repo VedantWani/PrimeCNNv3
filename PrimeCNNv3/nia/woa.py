@@ -84,7 +84,7 @@ class WOA:
         for whale in self.Swarm[1:]:
             if np.random.uniform() > 0.5:
                 A = self._compute_A()
-                abs_A = np.abs(A)
+                abs_A = np.linalg.norm(A)
 
                 if abs_A < 1.0:
                     whale.position = self._encircle_prey(whale_pos = whale.position, prey_pos = prey.position, A = A)
@@ -175,7 +175,7 @@ class WOA:
             where:
                 r_vec is random vector between 0,1
         '''
-        r_vec = np.random.uniform()
+        r_vec = np.random.uniform(size = self.n_dims)
         return (2.0*(self._a * r_vec)) - self._a
 
     def _compute_C(self):
@@ -185,7 +185,7 @@ class WOA:
             where:
                  r_vec is random vector between 0,1
         '''
-        r_vec = np.random.uniform()
+        r_vec = np.random.uniform(size = self.n_dims)
         return 2.0 * r_vec
 
     def _compute_D(self, prey_pos, whale_pos):
