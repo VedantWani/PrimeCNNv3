@@ -125,7 +125,9 @@ class Recorder(Callbacks):
 class ShowStats(Callbacks):
     def before_fit(self):
 
-        self.header_line =  ['Epoch', 'train_loss', 'valid_loss','accuracy','precision','recall','f1_score', 'time']
+        self.header_line =  ['Epoch', 'train_loss', 'valid_loss', 'time']
+        self.header_line[-1:-1] = [met.__name__ for met in self.metric]
+
         # loop over metric and add function name to header_line
         self.bs = []
         self.learner.log = []
