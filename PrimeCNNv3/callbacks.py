@@ -9,12 +9,21 @@ from .imports import *
 from .utils.vizualize import plot_loss_update
 from .metric import accuracy
 import csv
+import gc
 
 # Cell
 class Callbacks(GetAttr): _default='learner'
 
 # Cell
 class SetupLearnerCB(Callbacks):
+    def _clean_up(self):
+        del self.learner.xb, self.learner.yb
+        del self.learner.preds
+        del self.learner.loss
+        del self.learner.batch
+
+        gc.collect()
+
     def before_fit(self):
         self.learner.mb = master_bar(range(self.epochs))
         self.model.to(self.device)
@@ -28,16 +37,18 @@ class SetupLearnerCB(Callbacks):
     def before_train_epoch(self):
         self.model.train()
         self.learner.training = True
+    def after_train_epoch(self):
+        self._clean_up()
 
     def before_valid_epoch(self):
         self.model.eval()
         self.learner.training = False
 
+    def after_valid_epoch(self):
+        self._clean_up()
+
     def after_fit(self):
-        self.learner.xb, self.learner.yb = (None,),(None,)
-        self.learner.preds = None
-        self.learner.loss = None
-        torch.cuda.empty_cache()
+        self._clean_up()
 
 # Cell
 class Recorder(Callbacks):
