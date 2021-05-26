@@ -225,10 +225,9 @@ class Learner:
         self.wd = wd
 
         if params is None:
-            params = filter(lambda p: p.requires_grad)
-
+            params = filter(lambda p: p.requires_grad, self.model.parameters())
         #eps is changed to 1e-05 from default value of 1e-08
-        self.opt = self.opt_func(params = params, self.model.parameters()), lr = self.lr,
+        self.opt = self.opt_func(params = params, lr = self.lr,
                                 weight_decay = self.wd, **kwargs)
 
     def freeze_to(self, freeze_to_till, show_log = True):
