@@ -219,7 +219,7 @@ class Learner:
 
         self('after_fit')
 
-    def _init_optimizer(self, epochs, lr, wd,params = None **kwargs):
+    def _init_optimizer(self, epochs, lr, wd,params = None, **kwargs):
         self.epochs = epochs
         self.lr = lr
         self.wd = wd
