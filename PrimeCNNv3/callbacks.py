@@ -27,6 +27,7 @@ class SetupLearnerCB(Callbacks):
     def before_fit(self):
         self.learner.mb = master_bar(range(self.epochs))
         self.model.to(self.device)
+        self.opt.zero_grad()
 
     def before_batch(self):
 
@@ -47,8 +48,6 @@ class SetupLearnerCB(Callbacks):
     def after_valid_epoch(self):
         self._clean_up()
 
-    def after_fit(self):
-        self._clean_up()
 
 # Cell
 class Recorder(Callbacks):
@@ -150,7 +149,7 @@ class ShowStats(Callbacks):
         plot_loss_update(nbs_batches = self.bs, epochs = self.epochs, mb = self.mb,
                          train_loss = self.losses.train, valid_loss = self.losses.valid)
 
-        self.mb.write(self.log, table = True)
+        self.mb.write([str(lg) for lg in self.log], table = True)
 
 
 # Cell
