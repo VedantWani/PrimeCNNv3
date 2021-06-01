@@ -121,18 +121,25 @@ class Learner:
         self.batch_size = len(self.yb)
         self.preds = self.model(self.xb)
         self.loss = self.loss_func(self.preds, self.yb)
-        self.running_loss = self.loss.item()
+
 
         if self.training:
             self('before_step')
-            self.opt.zero_grad()
+            self.loss = self.loss / self.dls.accumulate
             self.loss.backward()
-            self.opt.step()
+            self.loss =  self.loss * self.dls.accumulate
+            if (self.num + 1) % self.dls.accumulate == 0 or (self.num + 1) == len(self.dls.train):
+                self.opt.step()
+                self.opt.zero_grad()
+
+                if self.lr_schedular is not None:
+                    self.lr_schedular.step()
+
             self('after_step')
 
-            if self.lr_schedular is not None:
-                self.lr_schedular.step()
 
+
+        self.running_loss = self.loss.item()
         self('after_batch')
 
 
