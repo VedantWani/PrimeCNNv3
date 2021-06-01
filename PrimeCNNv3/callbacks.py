@@ -103,17 +103,20 @@ class Recorder(Callbacks):
         self.losses.valid.append(self.track_loss.value)
 
     def after_batch(self):
+        #track learning rate
+        self.learner.lrs.append(self.opt.param_groups[0]['lr'])
+
         if self.training:
 
-            self.learner.train_iter += 1
-            #send leaner to track_loss
+            if (self.num + 1) % self.dls.accumulate == 0 or (self.num + 1) == len(self.dls.train):
+                self.learner.train_iter += 1
+                #send learner to track_loss
+                #track smoothloss for plotting
+                self.track_train_smoothLoss.value = self.learner
+                self.losses.train.append(self.track_train_smoothLoss.value)
 
-            #track learning rate
-            self.learner.lrs.append(self.opt.param_groups[0]['lr'])
 
-            #track smoothloss for plotting
-            self.track_train_smoothLoss.value = self.learner
-            self.losses.train.append(self.track_train_smoothLoss.value)
+
 
 
 

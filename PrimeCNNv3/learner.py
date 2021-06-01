@@ -20,7 +20,7 @@ class Learner:
         self.loss_func = loss_func
         self.opt_func = opt_func
         self.lr_schedular_func = lr_schedular_func
-
+        self.run_loss = 0
         self.opt = None
         self.lr_schedular = None
 
@@ -121,16 +121,18 @@ class Learner:
         self.batch_size = len(self.yb)
         self.preds = self.model(self.xb)
         self.loss = self.loss_func(self.preds, self.yb)
-
+        self.running_loss =  self.loss.item()
 
         if self.training:
             self('before_step')
             self.loss = self.loss / self.dls.accumulate
             self.loss.backward()
-            self.loss =  self.loss * self.dls.accumulate
+            self.run_loss += self.loss.item()
             if (self.num + 1) % self.dls.accumulate == 0 or (self.num + 1) == len(self.dls.train):
                 self.opt.step()
                 self.opt.zero_grad()
+                self.running_loss = self.run_loss
+                self.run_loss = 0
 
                 if self.lr_schedular is not None:
                     self.lr_schedular.step()
@@ -139,7 +141,7 @@ class Learner:
 
 
 
-        self.running_loss = self.loss.item()
+
         self('after_batch')
 
 
