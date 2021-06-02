@@ -10,6 +10,7 @@ from .utils.vizualize import plot_loss_update
 from .metric import accuracy
 import csv
 import gc
+import fastprogress.fastprogress as fp
 
 # Cell
 class Callbacks(GetAttr): _default='learner'
@@ -136,16 +137,20 @@ class Recorder(Callbacks):
 
 # Cell
 class ShowStats(Callbacks):
+    def __init__(self, SAVE_PATH = None):
+        '''
+            set path for logs
+        '''
+        fp.SAVE_PATH = SAVE_PATH
 
     def before_fit(self):
-
         self.header_line =  ['Epoch', 'train_loss', 'valid_loss', 'time']
         self.header_line[-1:-1] = [met.__name__ for met in self.metric]
 
         # loop over metric and add function name to header_line
         self.bs = []
         self.learner.log = []
-        self.mb.write(self.header_line, table = True)
+        self.mb.write([str(h_line) for h_line in self.header_line], table = True)
 
     def after_train_epoch(self):
         self.bs.append(self.train_iter)
