@@ -67,22 +67,23 @@ class Learner:
             #do one batch
             self.do_batch()
 
-            #take moving average
-            avg_loss = avg_loss * beta + (1-beta) * self.running_loss
-            smooth_loss = avg_loss / (1 - beta**(self.num + 1))
+            if self.num + 1 % self.dls.accumulate == 0 or self.num + 1 == len(self.dls.train):
+                #take moving average
+                avg_loss = avg_loss * beta + (1-beta) * self.running_loss
+                smooth_loss = avg_loss / (1 - beta**(self.num + 1))
 
-            if self.num + 1 > 1 and smooth_loss > 4 * best_loss:
-                print('Loss exploding.. stopping training')
-                break
+                if self.num + 1 > 1 and smooth_loss > 4 * best_loss:
+                    print('Loss exploding.. stopping training')
+                    break
 
-            if smooth_loss < best_loss or self.num + 1 == 1:
-                best_loss = smooth_loss
+                if smooth_loss < best_loss or self.num + 1 == 1:
+                    best_loss = smooth_loss
 
-            if self.num == self.num_iter:
-                break
-            #refactor later
-            lr_loss.append(smooth_loss)
-            lrs.append(self.lr_schedular.get_last_lr())
+                if self.num == self.num_iter:
+                    break
+                #refactor later
+                lr_loss.append(smooth_loss)
+                lrs.append(self.lr_schedular.get_last_lr())
 
         if suggestion:
             lr_s, losses = torch.tensor(lrs[num_iter // 10 : -5]), torch.tensor(lr_loss[num_iter // 10 :-5])
