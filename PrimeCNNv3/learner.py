@@ -76,7 +76,7 @@ class Learner:
                     avg_loss = avg_loss * beta + (1-beta) * self.running_loss
                     smooth_loss = avg_loss / (1 - beta**(self.num + 1))
 
-                    if self.num + 1 > 1 and smooth_loss > 4 * best_loss:
+                    if self.num + 1 > self.dls.accumulate and smooth_loss > 4 * best_loss:
                         print('Loss exploding.. stopping training')
                         break_flag = True
                         break
