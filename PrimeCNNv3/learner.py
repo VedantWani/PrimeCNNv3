@@ -60,6 +60,7 @@ class Learner:
 
         epochs = math.ceil(self.num_iter / len(self.dls.train))
         break_flag = False
+        step_counter = 0
 
         for idx_ in range(epochs):
             for self.num, batch in  enumerate(progress_bar(self.dls.train, leave = False)):
@@ -74,22 +75,26 @@ class Learner:
                 if ((self.num + 1) % self.dls.accumulate) == 0 or ((self.num + 1) == len(self.dls.train)):
                     #take moving average
                     avg_loss = avg_loss * beta + (1-beta) * self.running_loss
-                    smooth_loss = avg_loss / (1 - beta**(self.num + 1))
+                    smooth_loss = avg_loss / (1 - beta**(step_counter + 1))
 
-                    if self.num + 1 > self.dls.accumulate and smooth_loss > 4 * best_loss:
+                    if step_counter + 1 > 1 and smooth_loss > 4 * best_loss:
                         print('Loss exploding.. stopping training')
                         break_flag = True
                         break
 
-                    if smooth_loss < best_loss or self.num + 1 == self.dls.accumulate:
+                    if smooth_loss < best_loss or step_counter + 1 == 1:
                         best_loss = smooth_loss
 
-                    if self.num == self.num_iter:
+                    if step_counter == self.num_iter:
                         break_flag = True
                         break
+
+
                     #refactor later
                     lr_loss.append(smooth_loss)
                     lrs.append(self.lr_schedular.get_last_lr())
+
+                    step_counter += 1
 
             if break_flag:
                 break
