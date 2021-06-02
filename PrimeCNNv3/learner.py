@@ -58,32 +58,41 @@ class Learner:
         self._init_optimizer(epochs = None, lr= start_lr, wd = wd)
         self.lr_schedular = ExponentialLR(self.opt,final_lr= final_lr, num_iter= self.num_iter)
 
-        for self.num,batch in  enumerate(progress_bar(self.dls.train, leave = False)):
-            xb, yb = batch
-            #xb,yb = iter(self.dls.train).next()
-            self.xb = xb.to(self.device, non_blocking = True)
-            self.yb = yb.to(self.device, non_blocking = True)
+        epochs = math.ceil(self.num_iter / len(self.dls.train))
+        break_flag = False
 
-            #do one batch
-            self.do_batch()
+        for idx_ in range(epochs):
+            for self.num, batch in  enumerate(progress_bar(self.dls.train, leave = False)):
+                xb, yb = batch
+                #xb,yb = iter(self.dls.train).next()
+                self.xb = xb.to(self.device, non_blocking = True)
+                self.yb = yb.to(self.device, non_blocking = True)
 
-            if self.num + 1 % self.dls.accumulate == 0 or self.num + 1 == len(self.dls.train):
-                #take moving average
-                avg_loss = avg_loss * beta + (1-beta) * self.running_loss
-                smooth_loss = avg_loss / (1 - beta**(self.num + 1))
+                #do one batch
+                self.do_batch()
 
-                if self.num + 1 > 1 and smooth_loss > 4 * best_loss:
-                    print('Loss exploding.. stopping training')
-                    break
+                if ((self.num + 1) % self.dls.accumulate) == 0 or ((self.num + 1) == len(self.dls.train)):
+                    #take moving average
+                    avg_loss = avg_loss * beta + (1-beta) * self.running_loss
+                    smooth_loss = avg_loss / (1 - beta**(self.num + 1))
 
-                if smooth_loss < best_loss or self.num + 1 == 1:
-                    best_loss = smooth_loss
+                    if self.num + 1 > 1 and smooth_loss > 4 * best_loss:
+                        print('Loss exploding.. stopping training')
+                        break_flag = True
+                        break
 
-                if self.num == self.num_iter:
-                    break
-                #refactor later
-                lr_loss.append(smooth_loss)
-                lrs.append(self.lr_schedular.get_last_lr())
+                    if smooth_loss < best_loss or self.num + 1 == self.dls.accumulate:
+                        best_loss = smooth_loss
+
+                    if self.num == self.num_iter:
+                        break_flag = True
+                        break
+                    #refactor later
+                    lr_loss.append(smooth_loss)
+                    lrs.append(self.lr_schedular.get_last_lr())
+
+            if break_flag:
+                break
 
         if suggestion:
             lr_s, losses = torch.tensor(lrs[num_iter // 10 : -5]), torch.tensor(lr_loss[num_iter // 10 :-5])
