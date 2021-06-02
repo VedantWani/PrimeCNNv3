@@ -128,6 +128,7 @@ class Learner:
             self.loss = self.loss / self.dls.accumulate
             self.loss.backward()
             self.run_loss += self.loss.item()
+
             if (self.num + 1) % self.dls.accumulate == 0 or (self.num + 1) == len(self.dls.train):
                 self.opt.step()
                 self.opt.zero_grad()
@@ -211,8 +212,11 @@ class Learner:
 
 
         self.lr_schedular = torch.optim.lr_scheduler.OneCycleLR(self.opt, max_lr = max_lr, epochs = epochs,
-                                                                steps_per_epoch = len(self.dls.train), div_factor= div_factor,
+                                                                steps_per_epoch = len(self.dls.train) / self.dls.accumulate, div_factor= div_factor,
                                                            pct_start = pct_start, final_div_factor = final_div_factor)
+        #dividing len(self.dls.train) by accumulate to adjust the lr step as per the accumulation.
+
+
         self('before_fit')
         try:
 

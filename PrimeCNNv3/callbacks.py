@@ -136,6 +136,7 @@ class Recorder(Callbacks):
 
 # Cell
 class ShowStats(Callbacks):
+
     def before_fit(self):
 
         self.header_line =  ['Epoch', 'train_loss', 'valid_loss', 'time']
@@ -145,6 +146,7 @@ class ShowStats(Callbacks):
         self.bs = []
         self.learner.log = []
         self.mb.write(self.header_line, table = True)
+
     def after_train_epoch(self):
         self.bs.append(self.train_iter)
 

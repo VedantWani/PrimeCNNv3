@@ -25,7 +25,7 @@ from pathlib import Path
 
 #fastai
 from fastcore.foundation import GetAttr, noop
-from fastprogress.fastprogress import master_bar, progress_bar
+from fastprogress.fastprogress import master_bar, progress_bar, WRITER_FN
 from fastprogress.fastprogress import format_time
 
 import albumentations as A
