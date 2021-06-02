@@ -7,6 +7,7 @@ from .imports import *
 from torch.optim.lr_scheduler import _LRScheduler
 from .utils.vizualize import plot_lr
 import copy
+import math
 
 # Cell
 class Learner:
@@ -212,7 +213,7 @@ class Learner:
 
 
         self.lr_schedular = torch.optim.lr_scheduler.OneCycleLR(self.opt, max_lr = max_lr, epochs = epochs,
-                                                                steps_per_epoch = len(self.dls.train) / self.dls.accumulate, div_factor= div_factor,
+                                                                steps_per_epoch = math.ceil(len(self.dls.train) / self.dls.accumulate), div_factor= div_factor,
                                                            pct_start = pct_start, final_div_factor = final_div_factor)
         #dividing len(self.dls.train) by accumulate to adjust the lr step as per the accumulation.
 
