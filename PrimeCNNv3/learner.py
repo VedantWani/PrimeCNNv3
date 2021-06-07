@@ -392,11 +392,13 @@ class ExponentialLR(_LRScheduler):
 def random_seed(seed):
     '''Sets the seed value for reproducibility'''
     torch.manual_seed(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
     np.random.seed(seed)
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
+    if torch.cuda.is_available():
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.use_deterministic_algorithms(True)
 
 # Cell
 def seed_worker(worker_id):
