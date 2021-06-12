@@ -32,7 +32,7 @@ class Learner:
             cb.learner = self
 
 
-    def lr_finder(self, final_lr = 10, start_lr = 1e-08,num_iter = 100, wd = 0, beta = 0.98, suggestion = True):
+    def lr_finder(self, final_lr = 10, start_lr = 1e-07,num_iter = 100, wd = 0, beta = 0.98, suggestion = True):
 
         #save model, optimizer and lr_schdeular
         saved_param = {
@@ -92,7 +92,7 @@ class Learner:
 
                     #refactor later
                     lr_loss.append(smooth_loss)
-                    lrs.append(self.lr_schedular.get_last_lr())
+                    lrs.extend(self.lr_schedular.get_last_lr())
 
                     step_counter += 1
 
@@ -101,10 +101,11 @@ class Learner:
 
         if suggestion:
             lr_s, losses = torch.tensor(lrs[num_iter // 10 : -5]), torch.tensor(lr_loss[num_iter // 10 :-5])
+            print(f'Length of lrs {lr_s.shape}\nLenght of loss {losses.shape}')
             if not (len(losses) == 0):
                 lr_min = lr_s[losses.argmin()].item()
                 grad = (losses[1:] - losses[:-1]) / (lr_s[1:].log() - lr_s[:-1].log())
-
+                print(f'Grad :{grad.shape}')
                 lr_steep = lr_s[grad.argmin()].item()
 
                 print(f'Suggested LR : \nmin_lr: {lr_min / 10} \nlr_steep: {lr_steep}' )
@@ -398,7 +399,7 @@ def random_seed(seed):
     if torch.cuda.is_available():
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
-        torch.use_deterministic_algorithms(True)
+       # torch.use_deterministic_algorithms(True)
 
 # Cell
 def seed_worker(worker_id):
