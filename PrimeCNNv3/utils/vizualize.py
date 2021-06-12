@@ -16,7 +16,7 @@ def show_image(image,ax = None, title = None, figsize = (5,5)):
     ax.imshow(image)
     ax.axis('off')
 
-
+    plt.show()
 
 # Cell
 
@@ -33,6 +33,8 @@ def plot_loss_update(nbs_batches,epochs, mb, train_loss, valid_loss):
 
     mb.update_graph(graphs,x_bounds, y_bounds, figsize = (6,4)) #add margin
 
+    plt.show()
+
 # Cell
 def plot_lr(lrs, losses):
     '''
@@ -43,3 +45,4 @@ def plot_lr(lrs, losses):
     ax.set_ylabel('Loss')
     ax.set_xscale('log')
     ax.plot(lrs[:-2],losses[:-2])
+    plt.show()
