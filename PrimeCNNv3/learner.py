@@ -101,11 +101,11 @@ class Learner:
 
         if suggestion:
             lr_s, losses = torch.tensor(lrs[num_iter // 10 : -5]), torch.tensor(lr_loss[num_iter // 10 :-5])
-            print(f'Length of lrs {lr_s.shape}\nLenght of loss {losses.shape}')
+            #print(f'Length of lrs {lr_s.shape}\nLenght of loss {losses.shape}')
             if not (len(losses) == 0):
                 lr_min = lr_s[losses.argmin()].item()
                 grad = (losses[1:] - losses[:-1]) / (lr_s[1:].log() - lr_s[:-1].log())
-                print(f'Grad :{grad.shape}')
+                #print(f'Grad :{grad.shape}')
                 lr_steep = lr_s[grad.argmin()].item()
 
                 print(f'Suggested LR : \nmin_lr: {lr_min / 10} \nlr_steep: {lr_steep}' )
